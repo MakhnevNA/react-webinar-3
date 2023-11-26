@@ -5,7 +5,6 @@ class Store {
     constructor(initState = {}) {
         this.state = initState;
         this.listeners = []; // Слушатели изменений состояния
-        this.id = 8;
     }
 
     /**
@@ -88,7 +87,31 @@ class Store {
     }
 
     generateId() {
-        return (this.id += 1);
+        const num = Math.floor(Math.random() * 100);
+        const id = this.state.list.find((item) => {
+            return item.code === num;
+        });
+        if (!id && num !== 0) {
+            return num;
+        } else {
+            return this.generateId();
+        }
+    }
+
+    pluralizationString(highlightedCount) {
+        highlightedCount = Math.abs(Math.floor(highlightedCount));
+
+        if (highlightedCount % 10 === 1 && highlightedCount % 100 !== 11) {
+            return "раз";
+        } else if (
+            highlightedCount % 10 >= 2 &&
+            highlightedCount % 10 <= 4 &&
+            (highlightedCount % 100 < 10 || highlightedCount % 100 >= 20)
+        ) {
+            return "раза";
+        } else {
+            return "раз";
+        }
     }
 }
 

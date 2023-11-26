@@ -33,7 +33,11 @@ function App({ store }) {
                                 <div className="Item-title">
                                     {item.title}
                                     {item.highlightedCount
-                                        ? ` | Выделяли ${item.highlightedCount} раз `
+                                        ? ` | Выделяли ${
+                                              item.highlightedCount
+                                          } ${store.pluralizationString(
+                                              item.highlightedCount
+                                          )} `
                                         : null}
                                 </div>
                                 <div className="Item-actions">
