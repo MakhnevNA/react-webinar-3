@@ -5,6 +5,7 @@ class Store {
     constructor(initState = {}) {
         this.state = initState;
         this.listeners = []; // Слушатели изменений состояния
+        this.lastMaxCode = [];
     }
 
     /**
@@ -56,6 +57,7 @@ class Store {
      * @param code
      */
     deleteItem(code) {
+        this.lastMaxCode.push(code); // если бы после удаления последней записи можно было использовать еще раз ее code, то этой записи бы не было
         this.setState({
             ...this.state,
             list: this.state.list.filter((item) => item.code !== code),
@@ -87,15 +89,13 @@ class Store {
     }
 
     generateId() {
-        const num = Math.floor(Math.random() * 100);
-        const id = this.state.list.find((item) => {
-            return item.code === num;
-        });
-        if (!id && num !== 0) {
-            return num;
-        } else {
-            return this.generateId();
-        }
+        // создаем массив со значениями всех code
+        const maxCurrentCode = this.state.list.map((item) => item.code);
+        // находим max значение среди массива выше и последнейго значения
+        const max = Math.max(...maxCurrentCode, ...this.lastMaxCode);
+
+        // возращаем инкрементированное значение
+        return max + 1;
     }
 
     pluralizationString(highlightedCount) {
