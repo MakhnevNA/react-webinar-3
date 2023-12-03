@@ -6,26 +6,11 @@ import './style.css';
 
 function Controls(props) {
 	
-	const { cartPrice, setCartPrice, setIsOpenModalCart, cartItems} = props;
-
-	useEffect(() => {
-		calcCartPrice(cartItems)
-	},[cartItems] )
-	
-	function calcCartPrice(item) {
-		
-		// первоначальная стоимость корзины будет ценой первого выбраннного товара
-		let price = 0;
-
-		// проходимся по корзине товаров для подсчета общей суммы корзины
-		item.map(item => {
-			price = item.price * item.count + price   // тут что-то
-		})
-
-		// устанавливаем состояние цены корзины
-		setCartPrice(price)
-	}
-
+  const {setIsOpenModalCart, calcCartPrice, totalPrice, cartItems} = props;
+  
+  useEffect(() => {
+  	calcCartPrice(cartItems)
+  }, [cartItems] )
 
   return (
 	<div className='Controls'>
@@ -34,25 +19,34 @@ function Controls(props) {
 			  <div className="Controls-items">
 				  {
 					  cartItems.length > 0
-						  ? (`${cartItems.length} 
-						  	  ${plural(cartItems.length, { one: 'товар', few: 'товара', many: 'товаров', })} 
-							  /
-							  ${cartPrice.toLocaleString()} ₽`)
-						  : 'пусто'
+						? <> 
+							  <span style={{'marginRight': '6px'}}>{cartItems.length}</span>
+							  <span>{plural(cartItems.length, { one: 'товар', few: 'товара', many: 'товаров', })} </span>
+							  <span style={{'marginRight': '5px'}}>/</span>
+							  <span className="Controls-totalPrice">{totalPrice.toLocaleString()}</span>₽
+						  </>
+						: 'пусто'
 				  }
 			  </div>
 		</div>	
-		  <button onClick={() => setIsOpenModalCart(true)}>Перейти</button>
+		<div className="Controls-actions">
+			<button onClick={() => setIsOpenModalCart(true)}>Перейти</button>
+		</div>
+		  
     </div>
   )
 } 
 
 Controls.propTypes = {
-  onAdd: PropTypes.func
+  setIsOpenModalCart: PropTypes.func,
+  calcCartPrice: PropTypes.func,
+  totalPrice: PropTypes.number,
+  cartItems: PropTypes.array
 };
 
 Controls.defaultProps = {
-  onAdd: () => {}
+  setIsOpenModalCart: () => {},
+  calcCartPrice: () => {},
 }
 
 export default React.memo(Controls);

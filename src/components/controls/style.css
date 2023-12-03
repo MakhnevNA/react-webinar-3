@@ -1,7 +1,6 @@
 .Controls {
   display: flex;
   justify-content: flex-end;
-  padding: 20px;
 }
 
 
@@ -9,13 +8,33 @@
 	display: flex;
 	font-size: 18px;
 	font-weight: 700;
-	margin-right: 20px;
+	margin-right: 10px;
 }
 
 .Controls-name{
 	font-weight: 400;
-	margin-right: 15px;;
+	margin-right: 15px;
+	padding: 20px 0px 20px 10px;
 }
 
+.Controls-items{
+	padding: 20px 0px 20px 0px;
+}
 
+.Controls-totalPrice{
+	color: #0C0C0C;
+	margin-right: 5px;
+}
+
+.Controls-actions{
+	display: flex;
+	justify-content: flex-end;
+	padding: 20px 20px 20px 10px;
+}
+
+.Controls-actions button{
+	width: 74px;
+	color: #000;
+	font-size: 13px;
+}
 

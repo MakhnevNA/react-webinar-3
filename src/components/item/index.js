@@ -1,45 +1,22 @@
 import React, {useCallback, useState} from "react";
-import PropTypes, { func } from "prop-types";
+import PropTypes from "prop-types";
 import { plural } from "../../utils";
 import './style.css';
 
 function Item(props) {
 
-	const { setCartItems, item, button, store, cartItems } = props;
-
-	const isModalCart = store.getState().isModalCart
-	
-	function setCart(item) {
-
-		// проверяем, есть ли уже добавляемый товар в корзине
-		const isCode = cartItems.findIndex((code) => code.code === item.code)
-
-		// если есть, то count увеличиваем на 1. 
-		if (isCode > -1) {
-			cartItems[isCode].count += 1;  // увеличиваем количество выбранного товара на 1
-			setCartItems([...cartItems]);  // обновляем данные состояни, чтобы был перерендер
-		} else {
-			item.count = 1; // добавляем свойство, которое будет только у обьъектов в корзине. Количество данного товара в корзине
-			setCartItems([...cartItems, item]); // добавляем карточку товара в состояне корзины
-		}
-
-	}
-
-	function deleteItemFromCart(code) {
-		setCartItems(cartItems.filter(item => item.code !== code))
-	}
-	
+  const { setCartItems, item, button, isModalCart, deleteItemFromCart} = props;
 
   return (
 	
     <div className={'Item'} >
       	<div className='Item-code'>{item.code}</div>
 		<div className='Item-title'>{item.title}</div>
-		<div className='Item-price'>{item.price.toLocaleString()} <span>₽</span></div>
+		<div className={`Item-price ${isModalCart ? 'cart' : ''}`}>{item.price.toLocaleString()} <span>₽</span></div>
 		  {isModalCart ? <div className='Item-count'>{item.count} <span> шт</span></div> : null}
 		  
 		<div className='Item-actions'>
-			<button onClick={isModalCart ? () => deleteItemFromCart(item.code) : () => setCart (item)}>
+			<button onClick={isModalCart ? () => deleteItemFromCart(item) : () => setCartItems (item)}>
 				{button}
 			</button>
 		</div>
@@ -54,7 +31,15 @@ Item.propTypes = {
 	price: PropTypes.number,
 	count: PropTypes.number,
   }).isRequired,
+  isModalCart: PropTypes.bool,
   button: PropTypes.string,
+  deleteItemFromCart: PropTypes.func,
+  setCartItems: PropTypes.func,
 };
+
+Item.defaultProps = {
+	deleteItemFromCart: () => {},
+	setCartItems: () => {},
+  }
 
 export default React.memo(Item);

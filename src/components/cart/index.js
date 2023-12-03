@@ -1,48 +1,32 @@
 import React from "react";
 import Head from "../head"
-import Item from "../item";
-
+import List from "../list";
+import PropTypes from "prop-types";
 import './style.css'
-import { func } from "prop-types";
-
 
 
 function Cart(props) {
 
-	const {store, cartItems, setCartItems, cartPrice, isModalCart, onDeleteItem, setIsOpenModalCart,  } = props;
+	const {cartItems, setCartItems, totalPrice, isModalCart, deleteItemFromCart} = props;
 
 	return (
-	  <div className='Cart'>
-		<div className="Cart-modal">
-			<div className="Cart_header">
-				<Head title = 'Корзина'/>
-				<button onClick={() => setIsOpenModalCart(false)}>Закрыть</button>
-			</div>	
+		<>
+			<Head title='Корзина'/>
 			<div className="Cart_body">
-				{
-					cartItems.map(item =>
-						<div key={item.code} className='List-item'>
-							<Item
-								item={item}
-								isModalCart={isModalCart}
-								setCartItems = {setCartItems}
-								count={item.count}
-								cartItems = {cartItems}
-								button='Удалить'
-								onDeleteItem={onDeleteItem}
-								store = {store}
-								 />
-						</div>
-					  )	
-				}
+				<List
+					cartItems={cartItems}
+					setCartItems={setCartItems}
+					isModalCart={isModalCart}
+					button='Удалить'
+					deleteItemFromCart={deleteItemFromCart}
+				/>
 			</div>
-			<div
-				className={`Cart_summary ${!cartPrice ? 'Cart_empty' : null}`} >
+			<div className={`Cart_summary ${!totalPrice ? 'Cart_empty' : ''}`} >
 					
-				{cartPrice 
+				{totalPrice 
 				? <>
 					<span className="Cart_total">Итого</span>
-					<span className="Cart_price"> {cartPrice.toLocaleString()} ₽</span>
+					<span className="Cart_price"> {totalPrice.toLocaleString()} ₽</span>
 				</> 
 				: <span 
 					className="Cart_total" 
@@ -51,11 +35,22 @@ function Cart(props) {
 					</span>
 				}
 			</div>
-		</div>	  
-	  </div>
+		</>
 	)
 }
-  
+
+Cart.propTypes = {
+  cartItems: PropTypes.array,
+  totalPrice: PropTypes.number,
+  isModalCart: PropTypes.bool,
+  deleteItemFromCart: PropTypes.func,
+  setCartItems: PropTypes.func,
+};
+
+Cart.defaultProps = {
+	deleteItemFromCart: () => {},
+	setCartItems: () => {},
+  }
 
 
 export default Cart	

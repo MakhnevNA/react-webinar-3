@@ -4,6 +4,7 @@ import Controls from "./components/controls";
 import Head from "./components/head";
 import PageLayout from "./components/page-layout";
 import Cart from './components/cart';
+import Modal from './components/modal-layout';
 
 /**
  * Приложение
@@ -14,13 +15,24 @@ function App({store}) {
 
   const list = store.getState().list;
   const isModalCart = store.getState().isModalCart;
-
-  const [cartItems, setCartItems] = useState([]); // состояние корзины с тоавароми
-  const [cartPrice, setCartPrice] = useState(0); //стоимость товаров в корзине
+  const cartItems = store.getState().cartItems;
+  const totalPrice = store.getState().totalPrice;
 
   const callbacks = {
 	setIsOpenModalCart: useCallback((code) => {
 		store.setIsOpenModalCart(code);
+	}, [store]),
+	  
+	setCartItems: useCallback((item) => {
+		store.setCartItems(item);
+	}, [store]),
+
+	calcCartPrice: useCallback((item) => {
+		store.calcCartPrice(item);
+	}, [store]),
+
+	deleteItemFromCart: useCallback((code) => {
+		store.deleteItemFromCart(code);
 	}, [store]),
   }
 	
@@ -28,35 +40,30 @@ function App({store}) {
     <PageLayout>
   	   <Head title='Магазин'/>
 		  <Controls
-			  store={store}
-			  cartItems={cartItems}
-			  cartPrice={cartPrice}
-			  setCartPrice={setCartPrice}
 			  setIsOpenModalCart={callbacks.setIsOpenModalCart}
-			  
+			  calcCartPrice={callbacks.calcCartPrice}
+			  totalPrice={totalPrice}
+			  cartItems={cartItems}
 		  />
 		  
 		  <List
-			  store={store}
 			  list={list}
-			  cartItems={cartItems}
-			  setCartItems={setCartItems}
-			  cartPrice={cartPrice}
-			  setCartPrice={setCartPrice}
-			  setIsOpenModalCart={callbacks.setIsOpenModalCart}
-			  isModalCart = {isModalCart}
-			  
+			  isModalCart={isModalCart}
+			  setCartItems={callbacks.setCartItems}
 		  />
 		  
 		  {isModalCart
-			? <Cart
-				store = {store}
-				cartItems={cartItems}
-				setCartItems={setCartItems}
-				cartPrice={cartPrice}
-				setIsOpenModalCart={callbacks.setIsOpenModalCart}
-			  />
-			: null}
+		  	? <Modal setIsOpenModalCart={callbacks.setIsOpenModalCart}>
+			  	<Cart
+					cartItems={cartItems}
+					setCartItems={callbacks.setCartItems}
+					totalPrice={totalPrice}
+					isModalCart={isModalCart}
+					deleteItemFromCart={callbacks.deleteItemFromCart}
+				/> 
+			  </Modal>
+			: null
+		  }
     </PageLayout>
   );
 }

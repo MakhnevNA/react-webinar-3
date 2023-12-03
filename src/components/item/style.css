@@ -1,7 +1,6 @@
 .Item {
   display: flex;
   justify-content: flex-start;
-  transition: background-color 1s;
 }
 
 .Item_selected {
@@ -22,25 +21,37 @@
   display: flex;
   justify-content: flex-end;
   padding: 20px 20px 20px 10px;
+  
+}
+
+.Item-actions button{
+  width: 74px;
+  color: #000;
+  font-size: 13px;
 }
 
 .Item-price {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	margin-right: 52px;
+  color: #404040;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .Item-price span{
-	
-	margin-left: 6px;
-	
+  margin-left: 6px;
+}
+
+.Item-price.cart{
+  margin-right: 62px;
 }
 
 .Item-count {
-	padding: 20px 20px 20px 10px;
-	display: flex;
-	margin-right: 24px;
+  padding: 20px 0px 20px 0px;
+  display: flex;
+  margin-right: 15px;
+  color: #404040;
+
 }
 
 .Item-count span{
