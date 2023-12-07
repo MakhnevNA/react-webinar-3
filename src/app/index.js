@@ -3,6 +3,8 @@ import Main from "./main";
 import Basket from "./basket";
 import useStore from "../store/use-store";
 import useSelector from "../store/use-selector";
+import CurrentlyProduct from './currently-product';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 /**
  * Приложение
@@ -11,11 +13,16 @@ import useSelector from "../store/use-selector";
 function App() {
 
   const activeModal = useSelector(state => state.modals.name);
-
+	
   return (
     <>
-      <Main/>
-      {activeModal === 'basket' && <Basket/>}
+		<BrowserRouter>
+			<Routes>
+				<Route path='/' element={<Main/>} />
+				<Route path='/itemInfo/:id' element={<CurrentlyProduct/>} />
+			</Routes>
+			{activeModal === 'basket' && <Basket/>}
+		</BrowserRouter>  
     </>
   );
 }

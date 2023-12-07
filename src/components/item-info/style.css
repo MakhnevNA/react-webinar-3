@@ -1,0 +1,27 @@
+.ItemInfo{
+	color: #000;
+	font-family: Arial;
+	font-size: 18px;
+	padding: 20px 40px 0px 40px;
+}
+
+.ItemInfo div{
+	margin-bottom: 20px;
+}
+
+.ItemInfo-country span{
+	font-weight: 700;
+}
+
+.ItemInfo-category span{
+	font-weight: 700;
+}
+
+.ItemInfo-year span{
+	font-weight: 700;
+}
+
+.ItemInfo-price{
+	font-size: 24px;
+	font-weight: 700;
+}
