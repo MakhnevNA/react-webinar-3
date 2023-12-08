@@ -15,13 +15,11 @@ function ItemBasket(props) {
     onRemove: (e) => props.onRemove(props.item._id)
   };
 
-  const store = useStore();ы
-
   return (
     <div className={cn()}>
       {/*<div className={cn('code')}>{props.item._id}</div>*/}
       <Link 
-	  	onClick={() => store.actions.currentItem.loadCurrentItem(`${props.item._id}`)} 
+	  	onClick={() => props.store.actions.currentItem.loadCurrentItem(`${props.item._id}`)} 
 	  	to={`/itemInfo/${props.item._id}`} 
 		className={cn('title')}>{props.item.title}</Link>
       <div className={cn('right')}>

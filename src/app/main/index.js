@@ -1,4 +1,4 @@
-import {memo, useCallback, useEffect} from 'react';
+import {memo, useCallback, useEffect, useState} from 'react';
 import Item from "../../components/item";
 import PageLayout from "../../components/page-layout";
 import Head from "../../components/head";
@@ -31,17 +31,26 @@ function Main() {
 
   const renders = {
     item: useCallback((item) => {
-      return <Item item={item} onAdd={callbacks.addToBasket}/>
+		return <Item item={item} onAdd={callbacks.addToBasket} store={store} />
     }, [callbacks.addToBasket]),
   };
 
+  const [allPagesArr, setAllPagesArr] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  
   return (
     <PageLayout>
       <Head title='Магазин'/>
       <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount}
                   sum={select.sum}/>
       <List list={select.list} renderItem={renders.item}/>
-	  <NavigationPages/>
+	  <NavigationPages
+	  		store={store}
+	  		allPagesArr={allPagesArr}
+	  		setAllPagesArr={setAllPagesArr}
+	  		currentPage = {currentPage}
+	  		setCurrentPage = {setCurrentPage}
+	  />
     </PageLayout>
 
   );

@@ -8,7 +8,6 @@ import './style.css';
 
 function Item(props) {
 
-  const store = useStore();
   const cn = bem('Item');
 
   const callbacks = {
@@ -22,7 +21,7 @@ function Item(props) {
       {/*<div className={cn('code')}>{props.item._id}</div>*/}
 	  <Link 
 	  		to={`/itemInfo/${props.item._id}`} 
-			onClick={() => store.actions.currentItem.loadCurrentItem(`${props.item._id}`)} 
+			onClick={() => props.store.actions.currentItem.loadCurrentItem(`${props.item._id}`)} 
 			className={cn('title')}>
     	{props.item.title}
       </Link>

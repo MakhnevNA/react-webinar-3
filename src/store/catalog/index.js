@@ -89,6 +89,11 @@ class Catalog extends StoreModule {
 	  generateCountPages()
 	  return { allPagesArr }
   }
+  
+  	openNewPageAndSetCurrentPage(e, currentPage, setCurrentPage) {
+		this.openNewPage(e, currentPage)
+		setCurrentPage(+e.currentTarget.textContent)
+	}
 
 
 }
