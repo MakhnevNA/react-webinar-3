@@ -7,6 +7,7 @@ import List from "../../components/list";
 import useStore from "../../store/use-store";
 import useSelector from "../../store/use-selector";
 import NavigationPages from '../../components/navigation-pages';
+import { generationPageList } from '../../utils';
 
 function Main() {
 
@@ -19,7 +20,9 @@ function Main() {
   const select = useSelector(state => ({
     list: state.catalog.list,
     amount: state.basket.amount,
-    sum: state.basket.sum
+    sum: state.basket.sum,
+	currentPage: state.catalog.currentPage,
+	allPages: state.catalog.allPages
   }));
 
   const callbacks = {
@@ -27,6 +30,13 @@ function Main() {
     addToBasket: useCallback(_id => store.actions.basket.addToBasket(_id), [store]),
     // Открытие модалки корзины
     openModalBasket: useCallback(() => store.actions.modals.open('basket'), [store]),
+	//установка текущей страницы
+	setCurrentPage: useCallback((currentPage) => store.actions.catalog.setCurrentPage(currentPage),[store]),
+	
+	openNewPage: useCallback((e, currentPage, number) => store.actions.catalog.openNewPage(e, currentPage, number), [store]),
+	
+	load: useCallback((currentPage) => store.actions.catalog.load(currentPage))
+	
   }
 
   const renders = {
@@ -35,9 +45,9 @@ function Main() {
     }, [callbacks.addToBasket]),
   };
 
-  const [allPagesArr, setAllPagesArr] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
+  const {allPagesArr} = generationPageList(select.currentPage, select.allPages)	
   
+ 
   return (
     <PageLayout>
       <Head title='Магазин'/>
@@ -45,11 +55,10 @@ function Main() {
                   sum={select.sum}/>
       <List list={select.list} renderItem={renders.item}/>
 	  <NavigationPages
-	  		store={store}
-	  		allPagesArr={allPagesArr}
-	  		setAllPagesArr={setAllPagesArr}
-	  		currentPage = {currentPage}
-	  		setCurrentPage = {setCurrentPage}
+	  		load ={callbacks.load}	
+			openNewPage ={callbacks.openNewPage}
+			allPagesArr={allPagesArr}
+			currentPage = {select.currentPage}
 	  />
     </PageLayout>
 

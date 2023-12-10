@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { cn as bem } from '@bem-react/classname';
-import useStore from "../../store/use-store";
 import './style.css'
 
-function NavigationPages({store, allPagesArr, setAllPagesArr, currentPage, setCurrentPage}) {
+function NavigationPages({load, currentPage, allPagesArr, openNewPage}) {
 	
 	const cn = bem('NavigationPages');
 
 	useEffect(() => {
-		store.actions.catalog.calcAllPages(currentPage)
-			.then(data => setAllPagesArr(data.allPagesArr))
+		load(currentPage)
 	}, [currentPage])
 
 	return (
@@ -21,7 +19,7 @@ function NavigationPages({store, allPagesArr, setAllPagesArr, currentPage, setCu
 					if (item === '*') {
 						return <div key={item + i} className={cn('ellipsis')}>...</div>
 					}
-					return <button key={item} className={cn(`item ${currentPage === item && 'active'}`)} onClick={(e) => store.actions.catalog.openNewPageAndSetCurrentPage(e, currentPage, setCurrentPage, )}>{item}</button>
+					return <button key={item} className={cn(`item ${currentPage === item && 'active'}`)} onClick={(e) => openNewPage(e, currentPage, +e.currentTarget.textContent)}>{item}</button>
 				})}
 				
 			</div>
