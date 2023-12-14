@@ -12,11 +12,13 @@ class CatalogState extends StoreModule {
   initState() {
     return {
       list: [],
+	  categories: [],
       params: {
         page: 1,
         limit: 10,
         sort: 'order',
-        query: ''
+        query: '',
+        category: ''
       },
       count: 0,
       waiting: false
@@ -36,9 +38,21 @@ class CatalogState extends StoreModule {
     if (urlParams.has('limit')) validParams.limit = Math.min(Number(urlParams.get('limit')) || 10, 50);
     if (urlParams.has('sort')) validParams.sort = urlParams.get('sort');
     if (urlParams.has('query')) validParams.query = urlParams.get('query');
+	if (urlParams.has('query')) validParams.category = urlParams.get('category');
     await this.setParams({...this.initState().params, ...validParams, ...newParams}, true);
   }
 
+  initCategories() {
+    fetch('/api/v1/categories?fields=_id,title,parent(_id)&limit=*')
+    .then(resp => resp.json())
+    .then(json => {
+      this.setState({
+        ...this.getState(),
+        categories: json.result.items
+      });
+    })
+  }
+	
   /**
    * Сброс параметров к начальным
    * @param [newParams] {Object} Новые параметры
@@ -82,7 +96,11 @@ class CatalogState extends StoreModule {
       fields: 'items(*),count',
       sort: params.sort,
       'search[query]': params.query
-    };
+	  };
+	  
+	if (params.category.length) {
+      apiParams['search[category]'] = params.category
+    }
 
     const response = await fetch(`/api/v1/articles?${new URLSearchParams(apiParams)}`);
     const json = await response.json();
