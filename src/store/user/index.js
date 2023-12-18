@@ -81,7 +81,7 @@ class User extends StoreModule {
       } else {
         this.setState({
           ...this.getState(),
-          error: json.error.code.toLowerCase()
+          error: json.error.data.issues[0].message
         })
       }
     }))
